@@ -48,6 +48,13 @@ Then:
 npm install
 ```
 
+## gke-gcloud-auth-plugin
+
+`gke-gcloud-auth-plugin` is a GCP-specific authentication agent, you need
+to have it in your path.
+
+See: https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+
 ## Setup Pulumi
 
 You need to tell Pulumi which state to use.  You can store this in an S3
