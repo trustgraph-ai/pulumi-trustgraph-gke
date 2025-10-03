@@ -35,7 +35,7 @@ const gatewaySecret = new k8s.core.v1.Secret(
 
 const credential = aiSvcKey.privateKey.apply(atob);
 
-// Generate an (empty) gateway secret - no authentication
+// Generate VertexAI creds
 const aiSecret = new k8s.core.v1.Secret(
     "ai-secret",
     {
