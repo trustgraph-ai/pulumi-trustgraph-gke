@@ -4641,13 +4641,6 @@ items:
       targetPort: 8000
     selector:
       app: structured-query
-- apiVersion: v1
-  data:
-    private.json: UHV0IHlvdXIgR0NQIHByaXZhdGUuanNvbiBoZXJl
-  kind: Secret
-  metadata:
-    name: vertexai-creds
-    namespace: trustgraph
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
@@ -4709,13 +4702,6 @@ items:
       targetPort: 8000
     selector:
       app: text-completion
-- apiVersion: v1
-  data:
-    private.json: UHV0IHlvdXIgR0NQIHByaXZhdGUuanNvbiBoZXJl
-  kind: Secret
-  metadata:
-    name: vertexai-creds
-    namespace: trustgraph
 - apiVersion: apps/v1
   kind: Deployment
   metadata:
