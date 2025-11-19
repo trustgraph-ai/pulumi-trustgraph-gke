@@ -33,7 +33,6 @@
     {
         "name": "embeddings-fastembed",
         "parameters": {
-            "embeddings-model": "sentence-transformers/all-MiniLM-L6-v2"
         }
     },
     {
