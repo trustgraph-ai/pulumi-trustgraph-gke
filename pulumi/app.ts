@@ -35,7 +35,7 @@ const gatewaySecret = new k8s.core.v1.Secret(
 
 const credential = aiSvcKey.privateKey.apply(atob);
 
-// Generate an (empty) gateway secret - no authentication
+// Generate VertexAI creds
 const aiSecret = new k8s.core.v1.Secret(
     "ai-secret",
     {
@@ -45,6 +45,21 @@ const aiSecret = new k8s.core.v1.Secret(
         },
         stringData: {
             "private.json": credential
+        },
+    },
+    { provider: k8sProvider, dependsOn: appDeploy }
+);
+
+// Generate an (empty) MCP server secret - no authentication
+const mcpServerSecret = new k8s.core.v1.Secret(
+    "mcp-server-secret",
+    {
+        metadata: {
+            name: "mcp-server-secret",
+            namespace: "trustgraph"
+        },
+        stringData: {
+            "mcp-server-secret": ""
         },
     },
     { provider: k8sProvider, dependsOn: appDeploy }
