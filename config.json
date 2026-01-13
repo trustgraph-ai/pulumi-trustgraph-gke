@@ -38,7 +38,7 @@
     {
         "name": "vertexai",
         "parameters": {
-            "max-output-tokens": 4096
+            "max-output-tokens": 8192
         }
     }
 ]
