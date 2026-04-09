@@ -1,0 +1,7 @@
+encryptionsalt: v1:yqezhGLv91s=:v1:CqluEv2kIzqEPYgT:cxR83xRcP8FgAJc1OG5OoIPdRH3UGg==
+config:
+  trustgraph-gke:environment: dev
+  trustgraph-gke:region: us-west3
+  trustgraph-gke:zone: us-west3-a
+  trustgraph-gke:project: trustgraph-demo
+  gcp:disableGlobalProjectWarning: "true"

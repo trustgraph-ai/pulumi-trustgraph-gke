@@ -1,0 +1,5 @@
+name: trustgraph-gke
+description: Trustgraph deployment
+runtime: nodejs
+# backend:
+#   url: gs://bucket-state/whatever
