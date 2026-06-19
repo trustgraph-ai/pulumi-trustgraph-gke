@@ -9,9 +9,11 @@ platform).
 The full stack includes:
 
 - A Kubernetes cluster
-- Node pool containing 2 nodes
+- Node pool containing 3 nodes
 - Service accounts with access to VertexAI
-- Deploys a complete TrustGraph stack of resources in AKS
+- Deploys a complete TrustGraph stack of resources in GKE
+- GKE Gateway API with Google-managed TLS certificates
+- HTTPS access to TrustGraph UI and Grafana via public DNS names
 
 Keys and other configuration for the AI components are configured into
 TrustGraph using secrets.
@@ -29,7 +31,7 @@ but:
 Roadmap to deploy is:
 - Install Pulumi
 - Setup Pulumi
-- Configure your environment with Azure credentials using `az login`
+- Configure your environment with GCP credentials using `gcloud auth login`
 - Modify the local configuration to do what you want
 - Deploy
 - Use the system
@@ -65,7 +67,7 @@ pulumi login --local
 ```
 
 Pulumi operates in stacks, each stack is a separate deployment.  The
-git repo contains the configuration for a single stack `azure`, so you
+git repo contains the configuration for a single stack `gcp`, so you
 could:
 
 ```
@@ -82,20 +84,21 @@ to set up credentials to GCP.
 ## Modify the local configuration to do what you want
 
 You can edit:
-- settings in `Pulumi.STACKNAME.yaml` e.g. Pulumi.azure.yaml
+- settings in `Pulumi.STACKNAME.yaml` e.g. Pulumi.gcp.yaml
 - change `resources.yaml` with whatever you want to deploy.
   The resources.yaml file was created using the TrustGraph config portal,
   so you can re-generate your own.
 
 The `Pulumi.STACKNAME.yaml` configuration file contains settings for:
 
-```
-  trustgraph-gke:environment: dev
-  trustgraph-gke:region: us-west3
-  trustgraph-gke:zone: us-west3-a
-  trustgraph-gke:project: trustgraph-demo
-  gcp:disableGlobalProjectWarning: "true"
-```
+- `trustgraph-gke:environment` - Name of the environment (e.g. dev, prod).
+- `trustgraph-gke:region` - GCP region (e.g. us-west3).
+- `trustgraph-gke:zone` - GCP zone (e.g. us-west3-a).
+- `trustgraph-gke:project` - GCP project ID.
+- `trustgraph-gke:domain` - Domain name for the TrustGraph UI
+  (e.g. app.example.com).
+- `trustgraph-gke:grafana-domain` - Domain name for Grafana
+  (e.g. grafana.example.com).
 
 ## Deploy
 
@@ -119,19 +122,34 @@ If something goes wrong while deploying, retry before giving up.
 `pulumi up` is a retryable command and will continue from
 where it left off.
 
+## DNS setup
+
+After deployment, get the Gateway's external IP:
+
+```
+kubectl --kubeconfig kube.cfg -n trustgraph get gateway trustgraph-gateway
+```
+
+Create DNS A records pointing both your domain and grafana-domain at this
+IP address.  Google Certificate Manager will automatically provision and
+renew TLS certificates once DNS resolves.
+
 ## Use the system
 
-To get access to TrustGraph using the `kube.cfg` file, set up some
-port-forwarding.  You'll need multiple terminal windows to run each of
-these commands:
+Once DNS is configured, access the services at:
+
+- TrustGraph UI: `https://<your-domain>`
+- Grafana: `https://<your-grafana-domain>`
+
+Alternatively, you can use port-forwarding with the `kube.cfg` file:
 
 ```
 kubectl --kubeconfig kube.cfg -n trustgraph port-forward service/api-gateway 8088:8088
-kubectl --kubeconfig kube.cfg -n trustgraph port-forward service/workbench-ui 8888:8888
+kubectl --kubeconfig kube.cfg -n trustgraph port-forward service/trustgraph-ui 8888:8888
 kubectl --kubeconfig kube.cfg -n trustgraph port-forward service/grafana 3000:3000
 ```
 
-This will allow you to access Grafana and the Workbench UI from your local
+This will allow you to access Grafana and the TrustGraph UI from your local
 browser using `http://localhost:3000` and `http://localhost:8888`
 respectively.
 
@@ -151,7 +169,7 @@ export TRUSTGRAPH_TOKEN=$(pulumi stack output iamToken --show-secrets)
 ```
 
 
-## Deploy
+## Destroy
 
 ```
 pulumi destroy
@@ -162,7 +180,7 @@ Just say yes.
 ## How the config was built
 
 ```
-./update-config gcp-k8s 2.4.29
+./update-config gcp-k8s 2.5.16
 ```
 
 

@@ -4,4 +4,6 @@ config:
   trustgraph-gke:region: us-west3
   trustgraph-gke:zone: us-west3-a
   trustgraph-gke:project: trustgraph-demo
+  trustgraph-gke:domain: app.example.com
+  trustgraph-gke:grafana-domain: grafana.example.com
   gcp:disableGlobalProjectWarning: "true"
