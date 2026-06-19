@@ -10,8 +10,7 @@ function get(tag : string) {
     let val = cfg.get(tag);
 
     if (!val) {
-        console.log("ERROR: The '" + tag + "' config is mandatory");
-        throw "The '" + tag + "' config is mandatory";
+        throw new Error("The '" + tag + "' config is mandatory");
     }
 
     return val;
@@ -39,4 +38,7 @@ export const prefix = "trustgraph-" + environment;
 export const nodeType = "e2-standard-4";
 export const nodeCount = 3;
 export const diskSize = 20;
+
+export const domain = get("domain");
+export const grafanaDomain = get("grafana-domain");
 

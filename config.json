@@ -4,11 +4,19 @@
         "parameters": {}
     },
     {
+        "name": "vector-store-qdrant",
+        "parameters": {}
+    },
+    {
         "name": "row-store-cassandra",
         "parameters": {}
     },
     {
-        "name": "vector-store-qdrant",
+        "name": "cassandra",
+        "parameters": {}
+    },
+    {
+        "name": "garage",
         "parameters": {}
     },
     {
@@ -21,6 +29,10 @@
     },
     {
         "name": "trustgraph-base",
+        "parameters": {}
+    },
+    {
+        "name": "mcp-server",
         "parameters": {}
     },
     {
